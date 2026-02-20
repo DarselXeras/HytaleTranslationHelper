@@ -6,6 +6,7 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
 
   <data name="app.title" xml:space="preserve"><value>Hytale Language File Editor</value></data>
+
   <data name="menu.file" xml:space="preserve"><value>File</value></data>
   <data name="menu.file.chooseFolder" xml:space="preserve"><value>Choose Languages folder...</value></data>
   <data name="menu.file.chooseFile" xml:space="preserve"><value>Choose language file...</value></data>
@@ -14,26 +15,117 @@
   <data name="menu.file.import" xml:space="preserve"><value>Import JSON...</value></data>
   <data name="menu.file.export" xml:space="preserve"><value>Export JSON...</value></data>
   <data name="menu.file.exit" xml:space="preserve"><value>Exit</value></data>
+
   <data name="menu.edit" xml:space="preserve"><value>Edit</value></data>
   <data name="menu.edit.addKey" xml:space="preserve"><value>Add key</value></data>
   <data name="menu.edit.deleteKey" xml:space="preserve"><value>Delete key</value></data>
   <data name="menu.edit.nextMissing" xml:space="preserve"><value>Next missing field</value></data>
   <data name="menu.edit.copyPath" xml:space="preserve"><value>Copy path to here</value></data>
-  <data name="addEntry.context" xml:space="preserve"><value>Add new entry here</value></data>
+
   <data name="menu.tools" xml:space="preserve"><value>Tools</value></data>
   <data name="menu.tools.autoTranslate" xml:space="preserve"><value>Auto-translate (current key)</value></data>
+
   <data name="menu.view" xml:space="preserve"><value>View</value></data>
   <data name="menu.view.toggleTree" xml:space="preserve"><value>Toggle tree width</value></data>
+
   <data name="menu.language" xml:space="preserve"><value>Language</value></data>
+
   <data name="filter.title" xml:space="preserve"><value>Search/Filter</value></data>
   <data name="filter.placeholder" xml:space="preserve"><value>Search key...</value></data>
   <data name="filter.onlyMissing" xml:space="preserve"><value>Only missing</value></data>
   <data name="filter.apply" xml:space="preserve"><value>Filter</value></data>
   <data name="filter.nextMissing" xml:space="preserve"><value>Next missing</value></data>
+
+  <data name="addEntry.context" xml:space="preserve"><value>Add new entry here</value></data>
+  <data name="addEntry.prompt" xml:space="preserve"><value>New entry under:
+{0}
+
+Suffix (last segment after the dot):</value></data>
+  <data name="addEntry.title" xml:space="preserve"><value>Add entry</value></data>
+  <data name="addEntry.defaultSuffix" xml:space="preserve"><value>name</value></data>
+
+  <data name="addKey.prompt" xml:space="preserve"><value>New key:</value></data>
+  <data name="addKey.title" xml:space="preserve"><value>Add key</value></data>
+  <data name="addKey.default" xml:space="preserve"><value>Items.MyMod.NewKey.name</value></data>
+
+  <data name="selectedKey.label" xml:space="preserve"><value>Key: {0}</value></data>
+  <data name="selectedKey.empty" xml:space="preserve"><value>Key: -</value></data>
+
   <data name="status.ready" xml:space="preserve"><value>Ready.</value></data>
+  <data name="status.saved" xml:space="preserve"><value>Saved.</value></data>
   <data name="status.copiedPath" xml:space="preserve"><value>Path copied: {0}</value></data>
   <data name="status.summary" xml:space="preserve"><value>Languages: {0} | Keys: {1} | Missing translations: {2}</value></data>
+  <data name="status.noKeysInFilter" xml:space="preserve"><value>No keys in current filter.</value></data>
+  <data name="status.nextMissing" xml:space="preserve"><value>Next missing field: {0}</value></data>
+  <data name="status.noMissingInFilter" xml:space="preserve"><value>No missing translations in current filter.</value></data>
+  <data name="status.autoTranslated" xml:space="preserve"><value>Auto-translated: {0} field(s).</value></data>
+  <data name="status.nothingToTranslate" xml:space="preserve"><value>Nothing to translate.</value></data>
+  <data name="status.jsonExported" xml:space="preserve"><value>JSON exported: {0}</value></data>
+  <data name="status.jsonImported" xml:space="preserve"><value>JSON imported: {0}</value></data>
+
+  <data name="msg.loadFirst" xml:space="preserve"><value>Please load first.</value></data>
+  <data name="msg.selectNode" xml:space="preserve"><value>Please select a node.</value></data>
+  <data name="msg.selectNonRootLeaf" xml:space="preserve"><value>Please do not select a root leaf without prefix.</value></data>
+  <data name="msg.nodePathUnknown" xml:space="preserve"><value>Node path could not be determined.</value></data>
+  <data name="msg.suffixNoDot" xml:space="preserve"><value>Please enter only the last key segment (without dot).</value></data>
+  <data name="msg.keyExists" xml:space="preserve"><value>Key already exists.</value></data>
+  <data name="msg.keyExistsWithName" xml:space="preserve"><value>Key already exists:
+{0}</value></data>
+  <data name="msg.selectKeyFirst" xml:space="preserve"><value>Please select a key first.</value></data>
+  <data name="msg.deleteKeyQuestion" xml:space="preserve"><value>Delete key?
+{0}</value></data>
+  <data name="msg.unsavedChangesQuestion" xml:space="preserve"><value>There are unsaved changes. Save before continuing?</value></data>
+  <data name="msg.unsavedChangesTitle" xml:space="preserve"><value>Unsaved changes</value></data>
+  <data name="msg.noLangFile" xml:space="preserve"><value>No .lang file found/selected.</value></data>
+  <data name="msg.noLangFilesInFolder" xml:space="preserve"><value>No .lang files were found in the selected folder.</value></data>
+
+  <data name="err.languagesFolderMissing" xml:space="preserve"><value>Languages folder not found.</value></data>
+  <data name="err.noLangFileSelected" xml:space="preserve"><value>No .lang file selected.</value></data>
+  <data name="err.loadingFailed" xml:space="preserve"><value>Loading failed</value></data>
+  <data name="err.fileNameMissing" xml:space="preserve"><value>File name missing.</value></data>
+  <data name="err.saveFailed" xml:space="preserve"><value>Save failed</value></data>
+  <data name="err.jsonExportFailed" xml:space="preserve"><value>JSON export failed</value></data>
+  <data name="err.jsonImportFailed" xml:space="preserve"><value>JSON import failed</value></data>
+  <data name="err.invalidJson" xml:space="preserve"><value>Invalid JSON file.</value></data>
+  <data name="err.jsonNoLanguages" xml:space="preserve"><value>JSON contains no languages.</value></data>
+  <data name="err.jsonNoEntries" xml:space="preserve"><value>JSON contains no entries.</value></data>
+  <data name="err.minTwoLanguages" xml:space="preserve"><value>At least 2 languages required.</value></data>
+  <data name="err.noSourceTranslation" xml:space="preserve"><value>No source translation available.</value></data>
+  <data name="err.autoTranslateFailed" xml:space="preserve"><value>Auto-translation failed</value></data>
+  <data name="err.translateConnection" xml:space="preserve"><value>{0} - Connection error: {1}</value></data>
+  <data name="err.translateHttp" xml:space="preserve"><value>{0} - {1} {2}: {3}</value></data>
+  <data name="err.translateMissingField" xml:space="preserve"><value>{0} - Response without translatedText</value></data>
+  <data name="err.translateInvalidJson" xml:space="preserve"><value>{0} - Invalid JSON response: {1}</value></data>
+  <data name="err.myMemoryFailed" xml:space="preserve"><value>MyMemory fallback failed: {0}</value></data>
+  <data name="err.noTranslateEndpoint" xml:space="preserve"><value>No working translation endpoint found.</value></data>
+
+  <data name="translate.title" xml:space="preserve"><value>Auto-translate</value></data>
+  <data name="translate.url.prompt" xml:space="preserve"><value>LibreTranslate URL (leave empty = default)</value></data>
+
+  <data name="json.dialog.filter" xml:space="preserve"><value>JSON (*.json)|*.json|All files (*.*)|*.*</value></data>
+  <data name="json.export.title" xml:space="preserve"><value>Export language JSON</value></data>
+  <data name="json.import.title" xml:space="preserve"><value>Import language JSON</value></data>
+  <data name="json.validation.title" xml:space="preserve"><value>JSON validation</value></data>
+  <data name="json.preview.title" xml:space="preserve"><value>JSON Preview / Validation</value></data>
+  <data name="json.import.continueQuestion" xml:space="preserve"><value>Continue import?</value></data>
+  <data name="json.import.replaceQuestion" xml:space="preserve"><value>Replace existing data?
+Yes = replace, No = merge</value></data>
+
+  <data name="json.preview.file" xml:space="preserve"><value>File: {0}</value></data>
+  <data name="json.preview.languages" xml:space="preserve"><value>Languages: {0} ({1})</value></data>
+  <data name="json.preview.totalEntries" xml:space="preserve"><value>Total entries: {0}</value></data>
+  <data name="json.preview.importableEntries" xml:space="preserve"><value>Importable entries: {0}</value></data>
+  <data name="json.preview.validationNotes" xml:space="preserve"><value>Validation notes:</value></data>
+  <data name="json.preview.noValidEntries" xml:space="preserve"><value>No valid entries found for import.</value></data>
+  <data name="json.warn.emptyKeys" xml:space="preserve"><value>Skipped empty/invalid keys: {0}</value></data>
+  <data name="json.warn.duplicateKeys" xml:space="preserve"><value>Skipped duplicate keys (after trim): {0}</value></data>
+  <data name="json.warn.nullMaps" xml:space="preserve"><value>Entries without language value map: {0}</value></data>
+  <data name="json.warn.missingValues" xml:space="preserve"><value>Missing language values (imported empty): {0}</value></data>
+  <data name="json.warn.unknownLangs" xml:space="preserve"><value>Unknown language codes in entries ignored: {0}</value></data>
+
   <data name="common.notice" xml:space="preserve"><value>Notice</value></data>
   <data name="common.info" xml:space="preserve"><value>Info</value></data>
   <data name="common.delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="common.ok" xml:space="preserve"><value>OK</value></data>
+  <data name="common.cancel" xml:space="preserve"><value>Cancel</value></data>
 </root>
