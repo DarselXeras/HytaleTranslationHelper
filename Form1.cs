@@ -13,12 +13,12 @@ public partial class Form1 : Form
     private static readonly HttpClient _http = new() { Timeout = TimeSpan.FromSeconds(20) };
     private static readonly ResourceManager _rm = new("LanguageFileEditor.Resources.UIStrings", typeof(Form1).Assembly);
 
-    private const string DefaultLanguagesPath = @"F:\Games\Hytale\UserData\Saves\Modding Test\mods\DarselX_EndlessEmber\Server\Languages";
+    private const string DefaultLanguagesPath = "";
 
     private static readonly string _stateFilePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "LanguageFileEditor",
-        "state.json");
+        AppContext.BaseDirectory,
+        "config",
+        "lfe.config");
 
     private string _translateUrl = "https://libretranslate.com/translate";
     private string _rootPath = DefaultLanguagesPath;

@@ -42,6 +42,7 @@ partial class Form1
         _mnuDatei = new ToolStripMenuItem();
         _mnuDateiOrdner = new ToolStripMenuItem();
         _mnuDateiDateiWaehlen = new ToolStripMenuItem();
+        _mnuDateiNeueSprache = new ToolStripMenuItem();
         _mnuDateiLaden = new ToolStripMenuItem();
         _mnuDateiSpeichern = new ToolStripMenuItem();
         toolStripSeparator1 = new ToolStripSeparator();
@@ -100,11 +101,11 @@ partial class Form1
         // 
         // _btnAutoTranslate
         // 
-        _btnAutoTranslate.Location = new Point(0, 0);
+        _btnAutoTranslate.Dock = DockStyle.Fill;
+        _btnAutoTranslate.Location = new Point(1008, 7);
         _btnAutoTranslate.Name = "_btnAutoTranslate";
-        _btnAutoTranslate.Size = new Size(75, 23);
+        _btnAutoTranslate.Size = new Size(154, 24);
         _btnAutoTranslate.TabIndex = 0;
-        _btnAutoTranslate.Visible = false;
         // 
         // _txtSearch
         // 
@@ -112,14 +113,14 @@ partial class Form1
         _txtSearch.Location = new Point(131, 7);
         _txtSearch.Name = "_txtSearch";
         _txtSearch.PlaceholderText = "Key suchen...";
-        _txtSearch.Size = new Size(681, 23);
+        _txtSearch.Size = new Size(521, 23);
         _txtSearch.TabIndex = 1;
         // 
         // _chkOnlyMissing
         // 
         _chkOnlyMissing.AutoSize = true;
         _chkOnlyMissing.Dock = DockStyle.Fill;
-        _chkOnlyMissing.Location = new Point(818, 7);
+        _chkOnlyMissing.Location = new Point(658, 7);
         _chkOnlyMissing.Name = "_chkOnlyMissing";
         _chkOnlyMissing.Size = new Size(124, 24);
         _chkOnlyMissing.TabIndex = 2;
@@ -128,7 +129,7 @@ partial class Form1
         // _btnApplyFilter
         // 
         _btnApplyFilter.Dock = DockStyle.Fill;
-        _btnApplyFilter.Location = new Point(948, 7);
+        _btnApplyFilter.Location = new Point(788, 7);
         _btnApplyFilter.Name = "_btnApplyFilter";
         _btnApplyFilter.Size = new Size(64, 24);
         _btnApplyFilter.TabIndex = 3;
@@ -137,7 +138,7 @@ partial class Form1
         // _btnNextMissing
         // 
         _btnNextMissing.Dock = DockStyle.Fill;
-        _btnNextMissing.Location = new Point(1018, 7);
+        _btnNextMissing.Location = new Point(858, 7);
         _btnNextMissing.Name = "_btnNextMissing";
         _btnNextMissing.Size = new Size(144, 24);
         _btnNextMissing.TabIndex = 4;
@@ -269,7 +270,7 @@ partial class Form1
         // 
         // _mnuDatei
         // 
-        _mnuDatei.DropDownItems.AddRange(new ToolStripItem[] { _mnuDateiOrdner, _mnuDateiDateiWaehlen, _mnuDateiLaden, _mnuDateiSpeichern, toolStripSeparator1, _mnuDateiJsonImport, _mnuDateiJsonExport, toolStripSeparator2, _mnuDateiBeenden });
+        _mnuDatei.DropDownItems.AddRange(new ToolStripItem[] { _mnuDateiOrdner, _mnuDateiDateiWaehlen, _mnuDateiNeueSprache, _mnuDateiLaden, _mnuDateiSpeichern, toolStripSeparator1, _mnuDateiJsonImport, _mnuDateiJsonExport, toolStripSeparator2, _mnuDateiBeenden });
         _mnuDatei.Name = "_mnuDatei";
         _mnuDatei.Size = new Size(46, 20);
         _mnuDatei.Text = "Datei";
@@ -285,6 +286,12 @@ partial class Form1
         _mnuDateiDateiWaehlen.Name = "_mnuDateiDateiWaehlen";
         _mnuDateiDateiWaehlen.Size = new Size(223, 22);
         _mnuDateiDateiWaehlen.Text = "Sprachdatei wählen...";
+        // 
+        // _mnuDateiNeueSprache
+        // 
+        _mnuDateiNeueSprache.Name = "_mnuDateiNeueSprache";
+        _mnuDateiNeueSprache.Size = new Size(223, 22);
+        _mnuDateiNeueSprache.Text = "Neue Sprache anlegen...";
         // 
         // _mnuDateiLaden
         // 
@@ -404,17 +411,19 @@ partial class Form1
         // 
         // _filterBar
         // 
-        _filterBar.ColumnCount = 5;
+        _filterBar.ColumnCount = 6;
         _filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
         _filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
         _filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130F));
         _filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70F));
         _filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
+        _filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F));
         _filterBar.Controls.Add(_lblSearch, 0, 0);
         _filterBar.Controls.Add(_txtSearch, 1, 0);
         _filterBar.Controls.Add(_chkOnlyMissing, 2, 0);
         _filterBar.Controls.Add(_btnApplyFilter, 3, 0);
         _filterBar.Controls.Add(_btnNextMissing, 4, 0);
+        _filterBar.Controls.Add(_btnAutoTranslate, 5, 0);
         _filterBar.Dock = DockStyle.Top;
         _filterBar.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
         _filterBar.Location = new Point(0, 24);
@@ -493,6 +502,7 @@ partial class Form1
     private ToolStripMenuItem _mnuDatei;
     private ToolStripMenuItem _mnuDateiOrdner;
     private ToolStripMenuItem _mnuDateiDateiWaehlen;
+    private ToolStripMenuItem _mnuDateiNeueSprache;
     private ToolStripMenuItem _mnuDateiLaden;
     private ToolStripMenuItem _mnuDateiSpeichern;
     private ToolStripMenuItem _mnuDateiJsonImport;
@@ -513,4 +523,5 @@ partial class Form1
     private ToolStripSeparator toolStripSeparator1;
     private ToolStripSeparator toolStripSeparator2;
 }
+
 

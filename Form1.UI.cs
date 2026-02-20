@@ -15,6 +15,7 @@ public partial class Form1
 
         _mnuDateiOrdner.Click += (_, _) => BrowseFolder();
         _mnuDateiDateiWaehlen.Click += (_, _) => SelectLanguageFileAndLoad();
+        _mnuDateiNeueSprache.Click += (_, _) => CreateLanguageInFolder();
         _mnuDateiLaden.Click += (_, _) => RefreshListAndReload();
         _mnuDateiSpeichern.Click += (_, _) => SaveAll();
         _mnuDateiJsonImport.Click += (_, _) => ImportJson();
@@ -69,6 +70,7 @@ public partial class Form1
         _mnuDatei.Text = S("menu.file");
         _mnuDateiOrdner.Text = S("menu.file.chooseFolder");
         _mnuDateiDateiWaehlen.Text = S("menu.file.chooseFile");
+        _mnuDateiNeueSprache.Text = S("menu.file.createLanguage");
         _mnuDateiLaden.Text = S("menu.file.refresh");
         _mnuDateiSpeichern.Text = S("menu.file.save");
         _mnuDateiJsonImport.Text = S("menu.file.import");
@@ -93,6 +95,7 @@ public partial class Form1
         _chkOnlyMissing.Text = S("filter.onlyMissing");
         _btnApplyFilter.Text = S("filter.apply");
         _btnNextMissing.Text = S("filter.nextMissing");
+        _btnAutoTranslate.Text = S("filter.autoTranslate");
         _miCopyPathAtNode.Text = S("menu.edit.copyPath");
         _miAddEntryAtNode.Text = S("addEntry.context");
         if (_languages.Count == 0) _lblStatus.Text = S("status.ready");

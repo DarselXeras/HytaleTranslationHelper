@@ -10,6 +10,7 @@
   <data name="menu.file" xml:space="preserve"><value>Datei</value></data>
   <data name="menu.file.chooseFolder" xml:space="preserve"><value>Languages-Ordner wählen...</value></data>
   <data name="menu.file.chooseFile" xml:space="preserve"><value>Sprachdatei wählen...</value></data>
+  <data name="menu.file.createLanguage" xml:space="preserve"><value>Neue Sprache anlegen...</value></data>
   <data name="menu.file.refresh" xml:space="preserve"><value>Liste aktualisieren</value></data>
   <data name="menu.file.save" xml:space="preserve"><value>Speichern</value></data>
   <data name="menu.file.import" xml:space="preserve"><value>JSON importieren...</value></data>
@@ -35,6 +36,7 @@
   <data name="filter.onlyMissing" xml:space="preserve"><value>Nur fehlende</value></data>
   <data name="filter.apply" xml:space="preserve"><value>Filter</value></data>
   <data name="filter.nextMissing" xml:space="preserve"><value>Nächstes fehlendes</value></data>
+  <data name="filter.autoTranslate" xml:space="preserve"><value>Auto-Übersetzung</value></data>
 
   <data name="addEntry.context" xml:space="preserve"><value>Neuen Eintrag hier hinzufügen</value></data>
   <data name="addEntry.prompt" xml:space="preserve"><value>Neuer Eintrag unter:
@@ -62,6 +64,7 @@ Suffix (letzter Teil nach dem Punkt):</value></data>
   <data name="status.nothingToTranslate" xml:space="preserve"><value>Nichts zu übersetzen.</value></data>
   <data name="status.jsonExported" xml:space="preserve"><value>JSON exportiert: {0}</value></data>
   <data name="status.jsonImported" xml:space="preserve"><value>JSON importiert: {0}</value></data>
+  <data name="status.languageCreated" xml:space="preserve"><value>Neue Sprache angelegt: {0}</value></data>
 
   <data name="msg.loadFirst" xml:space="preserve"><value>Bitte zuerst laden.</value></data>
   <data name="msg.selectNode" xml:space="preserve"><value>Bitte einen Knoten auswählen.</value></data>
@@ -78,6 +81,9 @@ Suffix (letzter Teil nach dem Punkt):</value></data>
   <data name="msg.unsavedChangesTitle" xml:space="preserve"><value>Ungespeicherte Änderungen</value></data>
   <data name="msg.noLangFile" xml:space="preserve"><value>Keine .lang-Datei gefunden/ausgewählt.</value></data>
   <data name="msg.noLangFilesInFolder" xml:space="preserve"><value>Im gewählten Ordner wurden keine .lang-Dateien gefunden.</value></data>
+  <data name="msg.noDefaultLanguageAvailable" xml:space="preserve"><value>Es sind keine vorhandenen Sprachen als Fallback verfügbar.</value></data>
+  <data name="msg.invalidLanguageName" xml:space="preserve"><value>Der neue Sprachname enthält ungültige Zeichen.</value></data>
+  <data name="msg.languageAlreadyExists" xml:space="preserve"><value>Die Sprache existiert bereits: {0}</value></data>
 
   <data name="err.languagesFolderMissing" xml:space="preserve"><value>Languages-Ordner nicht gefunden.</value></data>
   <data name="err.noLangFileSelected" xml:space="preserve"><value>Keine .lang-Datei ausgewählt.</value></data>
@@ -92,6 +98,7 @@ Suffix (letzter Teil nach dem Punkt):</value></data>
   <data name="err.minTwoLanguages" xml:space="preserve"><value>Mindestens 2 Sprachen nötig.</value></data>
   <data name="err.noSourceTranslation" xml:space="preserve"><value>Keine Quellübersetzung vorhanden.</value></data>
   <data name="err.autoTranslateFailed" xml:space="preserve"><value>Auto-Übersetzen fehlgeschlagen</value></data>
+  <data name="err.createLanguageFailed" xml:space="preserve"><value>Neue Sprache anlegen fehlgeschlagen</value></data>
   <data name="err.translateConnection" xml:space="preserve"><value>{0} - Verbindungsfehler: {1}</value></data>
   <data name="err.translateHttp" xml:space="preserve"><value>{0} - {1} {2}: {3}</value></data>
   <data name="err.translateMissingField" xml:space="preserve"><value>{0} - Antwort ohne translatedText</value></data>
@@ -100,6 +107,10 @@ Suffix (letzter Teil nach dem Punkt):</value></data>
   <data name="err.noTranslateEndpoint" xml:space="preserve"><value>Kein funktionierender Übersetzungs-Endpunkt gefunden.</value></data>
 
   <data name="translate.title" xml:space="preserve"><value>Auto-Übersetzen</value></data>
+  <data name="createLang.title" xml:space="preserve"><value>Neue Sprache anlegen</value></data>
+  <data name="createLang.newLanguage" xml:space="preserve"><value>Neue Sprache (Ordnername)</value></data>
+  <data name="createLang.defaultLanguage" xml:space="preserve"><value>Default/Fallback-Sprache (optional)</value></data>
+  <data name="createLang.noneOption" xml:space="preserve"><value>(Keine - nur Keys übernehmen)</value></data>
   <data name="translate.url.prompt" xml:space="preserve"><value>LibreTranslate URL (leer lassen = Standard)</value></data>
 
   <data name="json.dialog.filter" xml:space="preserve"><value>JSON (*.json)|*.json|Alle Dateien (*.*)|*.*</value></data>

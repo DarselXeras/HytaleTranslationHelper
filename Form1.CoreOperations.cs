@@ -134,6 +134,132 @@ public partial class Form1
         SaveStartupPath(); LoadAll();
     }
 
+    private (string? NewLanguage, string? DefaultLanguage) ShowCreateLanguageDialog(IReadOnlyList<string> existingLanguages)
+    {
+        using var dlg = new Form
+        {
+            Text = S("createLang.title"),
+            Width = 520,
+            Height = 190,
+            StartPosition = FormStartPosition.CenterParent,
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            MinimizeBox = false,
+            MaximizeBox = false
+        };
+
+        var grid = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 3, Padding = new Padding(10) };
+        grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 170));
+        grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 34));
+        grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 34));
+        grid.RowStyles.Add(new RowStyle(SizeType.Absolute, 44));
+
+        var lblNew = new Label { Text = S("createLang.newLanguage"), Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft };
+        var txtNew = new TextBox { Dock = DockStyle.Fill, PlaceholderText = "fr-FR" };
+
+        var lblDefault = new Label { Text = S("createLang.defaultLanguage"), Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft };
+        var cmbDefault = new ComboBox { Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList };
+        cmbDefault.Items.Add(S("createLang.noneOption"));
+        cmbDefault.Items.AddRange(existingLanguages.Cast<object>().ToArray());
+        cmbDefault.SelectedIndex = 0;
+
+        var btnOk = new Button { Text = S("common.ok"), DialogResult = DialogResult.OK, AutoSize = true };
+        var btnCancel = new Button { Text = S("common.cancel"), DialogResult = DialogResult.Cancel, AutoSize = true };
+        var buttons = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.RightToLeft };
+        buttons.Controls.Add(btnOk);
+        buttons.Controls.Add(btnCancel);
+
+        grid.Controls.Add(lblNew, 0, 0);
+        grid.Controls.Add(txtNew, 1, 0);
+        grid.Controls.Add(lblDefault, 0, 1);
+        grid.Controls.Add(cmbDefault, 1, 1);
+        grid.Controls.Add(buttons, 0, 2);
+        grid.SetColumnSpan(buttons, 2);
+
+        dlg.AcceptButton = btnOk;
+        dlg.CancelButton = btnCancel;
+        dlg.Controls.Add(grid);
+
+        if (dlg.ShowDialog(this) != DialogResult.OK) return (null, null);
+        var selectedDefault = cmbDefault.SelectedIndex <= 0 ? null : cmbDefault.SelectedItem?.ToString();
+        return (txtNew.Text.Trim(), selectedDefault);
+    }
+
+    private void CreateLanguageInFolder()
+    {
+        try
+        {
+            if (!ConfirmSaveIfNeeded()) return;
+            if (!Directory.Exists(_rootPath))
+            {
+                MessageBox.Show(this, S("err.languagesFolderMissing"), S("common.notice"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var existingLanguages = Directory.GetDirectories(_rootPath)
+                .Select(Path.GetFileName)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => x!)
+                .OrderBy(x => x)
+                .ToList();
+
+            var (newLanguage, defaultLanguage) = ShowCreateLanguageDialog(existingLanguages);
+            if (string.IsNullOrWhiteSpace(newLanguage) || string.IsNullOrWhiteSpace(defaultLanguage)) return;
+
+            if (newLanguage.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            {
+                MessageBox.Show(this, S("msg.invalidLanguageName"), S("common.notice"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var targetLangDir = Path.Combine(_rootPath, newLanguage);
+            if (Directory.Exists(targetLangDir))
+            {
+                MessageBox.Show(this, SF("msg.languageAlreadyExists", newLanguage), S("common.notice"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            Directory.CreateDirectory(targetLangDir);
+
+            var langFiles = GetAvailableLangFiles(_rootPath);
+            var defaultDir = string.IsNullOrWhiteSpace(defaultLanguage) ? null : Path.Combine(_rootPath, defaultLanguage);
+
+            foreach (var file in langFiles)
+            {
+                var sourcePath = defaultDir is null ? null : Path.Combine(defaultDir, file);
+                var targetPath = Path.Combine(targetLangDir, file);
+
+                Dictionary<string, string> values;
+                if (sourcePath is not null && File.Exists(sourcePath))
+                {
+                    values = ParseLangFile(sourcePath);
+                }
+                else
+                {
+                    var firstExistingPath = Directory.GetDirectories(_rootPath)
+                        .Select(dir => Path.Combine(dir, file))
+                        .FirstOrDefault(File.Exists);
+
+                    values = firstExistingPath is null
+                        ? new Dictionary<string, string>(StringComparer.Ordinal)
+                        : ParseLangFile(firstExistingPath).Keys.ToDictionary(k => k, _ => string.Empty, StringComparer.Ordinal);
+                }
+
+                using var sw = new StreamWriter(targetPath, false, new UTF8Encoding(false));
+                foreach (var kv in values.OrderBy(k => k.Key, StringComparer.Ordinal))
+                    sw.WriteLine($"{kv.Key} = {kv.Value}");
+            }
+
+            _hasUnsavedChanges = false;
+            LoadAll();
+            UpdateStatus(SF("status.languageCreated", newLanguage));
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(this, ex.Message, S("err.createLanguageFailed"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
     private void LoadAll()
     {
         try
@@ -226,14 +352,29 @@ public partial class Form1
     private void BuildEditors()
     {
         _editorRows.Controls.Clear(); _editorRows.RowStyles.Clear(); _editorRows.ColumnStyles.Clear(); _langEditors.Clear();
-        _editorRows.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 95)); _editorRows.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); _editorRows.RowCount = _languages.Count;
+        _editorRows.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 95));
+        _editorRows.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        _editorRows.RowCount = _languages.Count;
+
+        var visibleRows = Math.Min(5, Math.Max(1, _languages.Count));
+        var availableHeight = Math.Max(220, _editorRows.ClientSize.Height - _editorRows.Padding.Vertical);
+        var rowHeight = Math.Max(100, availableHeight / visibleRows);
+        _editorRows.AutoScroll = _languages.Count > 5;
+
         for (int i = 0; i < _languages.Count; i++)
         {
-            var lang = _languages[i]; _editorRows.RowStyles.Add(new RowStyle(SizeType.Absolute, 140));
+            var lang = _languages[i];
+            _editorRows.RowStyles.Add(_languages.Count <= 5
+                ? new RowStyle(SizeType.Percent, 100f / _languages.Count)
+                : new RowStyle(SizeType.Absolute, rowHeight));
+
             var lbl = new Label { Text = lang, TextAlign = ContentAlignment.TopLeft, Dock = DockStyle.Fill, Padding = new Padding(0, 6, 0, 0) };
-            var txt = new TextBox { Multiline = true, Dock = DockStyle.Fill, ScrollBars = ScrollBars.Vertical, Tag = lang, Margin = new Padding(0, 0, 0, 10) };
+            var txt = new TextBox { Multiline = true, Dock = DockStyle.Fill, ScrollBars = ScrollBars.Vertical, Tag = lang, Margin = new Padding(0, 0, 0, 8) };
             txt.TextChanged += EditorTextChanged;
-            _editorRows.Controls.Add(lbl, 0, i); _editorRows.Controls.Add(txt, 1, i); _langEditors[lang] = txt;
+
+            _editorRows.Controls.Add(lbl, 0, i);
+            _editorRows.Controls.Add(txt, 1, i);
+            _langEditors[lang] = txt;
         }
     }
 

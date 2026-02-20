@@ -10,6 +10,7 @@
   <data name="menu.file" xml:space="preserve"><value>File</value></data>
   <data name="menu.file.chooseFolder" xml:space="preserve"><value>Choose Languages folder...</value></data>
   <data name="menu.file.chooseFile" xml:space="preserve"><value>Choose language file...</value></data>
+  <data name="menu.file.createLanguage" xml:space="preserve"><value>Create new language...</value></data>
   <data name="menu.file.refresh" xml:space="preserve"><value>Refresh list</value></data>
   <data name="menu.file.save" xml:space="preserve"><value>Save</value></data>
   <data name="menu.file.import" xml:space="preserve"><value>Import JSON...</value></data>
@@ -35,6 +36,7 @@
   <data name="filter.onlyMissing" xml:space="preserve"><value>Only missing</value></data>
   <data name="filter.apply" xml:space="preserve"><value>Filter</value></data>
   <data name="filter.nextMissing" xml:space="preserve"><value>Next missing</value></data>
+  <data name="filter.autoTranslate" xml:space="preserve"><value>Auto-translation</value></data>
 
   <data name="addEntry.context" xml:space="preserve"><value>Add new entry here</value></data>
   <data name="addEntry.prompt" xml:space="preserve"><value>New entry under:
@@ -62,6 +64,7 @@ Suffix (last segment after the dot):</value></data>
   <data name="status.nothingToTranslate" xml:space="preserve"><value>Nothing to translate.</value></data>
   <data name="status.jsonExported" xml:space="preserve"><value>JSON exported: {0}</value></data>
   <data name="status.jsonImported" xml:space="preserve"><value>JSON imported: {0}</value></data>
+  <data name="status.languageCreated" xml:space="preserve"><value>Created new language: {0}</value></data>
 
   <data name="msg.loadFirst" xml:space="preserve"><value>Please load first.</value></data>
   <data name="msg.selectNode" xml:space="preserve"><value>Please select a node.</value></data>
@@ -78,6 +81,9 @@ Suffix (last segment after the dot):</value></data>
   <data name="msg.unsavedChangesTitle" xml:space="preserve"><value>Unsaved changes</value></data>
   <data name="msg.noLangFile" xml:space="preserve"><value>No .lang file found/selected.</value></data>
   <data name="msg.noLangFilesInFolder" xml:space="preserve"><value>No .lang files were found in the selected folder.</value></data>
+  <data name="msg.noDefaultLanguageAvailable" xml:space="preserve"><value>No existing fallback languages are available.</value></data>
+  <data name="msg.invalidLanguageName" xml:space="preserve"><value>The new language name contains invalid characters.</value></data>
+  <data name="msg.languageAlreadyExists" xml:space="preserve"><value>Language already exists: {0}</value></data>
 
   <data name="err.languagesFolderMissing" xml:space="preserve"><value>Languages folder not found.</value></data>
   <data name="err.noLangFileSelected" xml:space="preserve"><value>No .lang file selected.</value></data>
@@ -92,6 +98,7 @@ Suffix (last segment after the dot):</value></data>
   <data name="err.minTwoLanguages" xml:space="preserve"><value>At least 2 languages required.</value></data>
   <data name="err.noSourceTranslation" xml:space="preserve"><value>No source translation available.</value></data>
   <data name="err.autoTranslateFailed" xml:space="preserve"><value>Auto-translation failed</value></data>
+  <data name="err.createLanguageFailed" xml:space="preserve"><value>Creating new language failed</value></data>
   <data name="err.translateConnection" xml:space="preserve"><value>{0} - Connection error: {1}</value></data>
   <data name="err.translateHttp" xml:space="preserve"><value>{0} - {1} {2}: {3}</value></data>
   <data name="err.translateMissingField" xml:space="preserve"><value>{0} - Response without translatedText</value></data>
@@ -100,6 +107,10 @@ Suffix (last segment after the dot):</value></data>
   <data name="err.noTranslateEndpoint" xml:space="preserve"><value>No working translation endpoint found.</value></data>
 
   <data name="translate.title" xml:space="preserve"><value>Auto-translate</value></data>
+  <data name="createLang.title" xml:space="preserve"><value>Create new language</value></data>
+  <data name="createLang.newLanguage" xml:space="preserve"><value>New language (folder name)</value></data>
+  <data name="createLang.defaultLanguage" xml:space="preserve"><value>Default/fallback language (optional)</value></data>
+  <data name="createLang.noneOption" xml:space="preserve"><value>(None - create keys only)</value></data>
   <data name="translate.url.prompt" xml:space="preserve"><value>LibreTranslate URL (leave empty = default)</value></data>
 
   <data name="json.dialog.filter" xml:space="preserve"><value>JSON (*.json)|*.json|All files (*.*)|*.*</value></data>
