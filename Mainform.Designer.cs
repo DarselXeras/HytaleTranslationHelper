@@ -1,6 +1,6 @@
 ﻿namespace LanguageFileEditor;
 
-partial class Form1
+partial class Mainform
 {
     private System.ComponentModel.IContainer components = null;
 
@@ -444,7 +444,7 @@ partial class Form1
         _lblSearch.Text = "Suche/Filter";
         _lblSearch.TextAlign = ContentAlignment.MiddleLeft;
         // 
-        // Form1
+        // Mainform
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
@@ -454,7 +454,7 @@ partial class Form1
         Controls.Add(_filterBar);
         Controls.Add(_menuMain);
         MainMenuStrip = _menuMain;
-        Name = "Form1";
+        Name = "Mainform";
         Text = "Hytale Languagefile Editor";
         _treeMenu.ResumeLayout(false);
         _middle.Panel1.ResumeLayout(false);
@@ -523,5 +523,6 @@ partial class Form1
     private ToolStripSeparator toolStripSeparator1;
     private ToolStripSeparator toolStripSeparator2;
 }
+
 
 

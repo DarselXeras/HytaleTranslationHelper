@@ -1,9 +1,9 @@
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 
 namespace LanguageFileEditor;
 
-public partial class Form1
+public partial class Mainform
 {
     private void AddEntryAtSelectedNode()
     {
@@ -466,3 +466,4 @@ public partial class Form1
         catch (Exception ex) { MessageBox.Show(this, ex.Message, S("err.saveFailed"), MessageBoxButtons.OK, MessageBoxIcon.Error); }
     }
 }
+

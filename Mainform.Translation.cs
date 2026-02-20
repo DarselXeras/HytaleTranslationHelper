@@ -1,9 +1,9 @@
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 
 namespace LanguageFileEditor;
 
-public partial class Form1
+public partial class Mainform
 {
     private async Task AutoTranslateSelectedKeyAsync()
     {
@@ -210,3 +210,4 @@ public partial class Form1
         return body.Length > 300 ? body[..300] + "..." : body;
     }
 }
+

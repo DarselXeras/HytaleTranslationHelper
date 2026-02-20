@@ -1,0 +1,55 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Segoe UI, Arial, sans-serif; height: 100vh; display: grid; grid-template-rows: auto auto 1fr auto; }
+button, select, input, textarea { font: inherit; }
+.toolbar, .filterbar { display: flex; gap: 8px; padding: 8px; border-bottom: 1px solid #ddd; flex-wrap: wrap; }
+.filterbar { background: #fafafa; }
+.layout { display: grid; grid-template-columns: 340px 1fr; min-height: 0; }
+.left { border-right: 1px solid #ddd; overflow: auto; }
+.right { display: grid; grid-template-rows: auto 1fr; min-height: 0; }
+#selectedKey { padding: 8px; border-bottom: 1px solid #eee; font-weight: 600; }
+#editors { overflow: auto; padding: 8px; display: grid; gap: 8px; }
+.editor-row { display: grid; grid-template-columns: 120px 1fr; gap: 8px; min-height: 120px; }
+.editor-row label { padding-top: 6px; font-weight: 600; }
+.editor-row textarea { width: 100%; min-height: 120px; resize: vertical; }
+#status { padding: 6px 10px; border-top: 1px solid #ddd; font-size: 13px; background: #fafafa; }
+
+.tree { padding: 8px; font-size: 14px; user-select: none; }
+.tree ul { list-style: none; margin: 0; padding-left: 16px; }
+.tree-row { display: flex; align-items: center; gap: 6px; padding: 3px 6px; border-radius: 4px; cursor: pointer; }
+.tree-row:hover { background: #f1f5ff; }
+.tree-row.active { background: #dfe9ff; }
+.tree-toggle { width: 16px; text-align: center; color: #666; font-size: 11px; }
+.tree-label.folder { font-weight: 600; color: #334; }
+.tree-label.leaf { color: #223; }
+.hidden { display: none !important; }
+
+.context-menu {
+  position: fixed;
+  z-index: 1200;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 8px 26px rgba(0,0,0,.2);
+  padding: 6px;
+}
+.context-menu button {
+  border: 0;
+  background: transparent;
+  padding: 8px 10px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.context-menu button:hover { background: #eef3ff; }
+
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.35);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+.modal { background: #fff; min-width: 420px; max-width: 560px; border-radius: 10px; padding: 14px; box-shadow: 0 8px 26px rgba(0,0,0,.25); }
+.modal h3 { margin: 0 0 10px; }
+.modal .field { margin: 8px 0; display: grid; gap: 6px; }
+.modal .field label { font-size: 13px; color: #444; }
+.modal input, .modal select { width: 100%; padding: 8px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }

@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Net.Http;
 using System.Resources;
 using System.Text;
@@ -6,12 +6,12 @@ using System.Text.Json;
 
 namespace LanguageFileEditor;
 
-public partial class Form1 : Form
+public partial class Mainform : Form
 {
     private readonly Dictionary<string, Dictionary<string, string>> _langData = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, TextBox> _langEditors = new(StringComparer.OrdinalIgnoreCase);
     private static readonly HttpClient _http = new() { Timeout = TimeSpan.FromSeconds(20) };
-    private static readonly ResourceManager _rm = new("LanguageFileEditor.Resources.UIStrings", typeof(Form1).Assembly);
+    private static readonly ResourceManager _rm = new("LanguageFileEditor.Resources.UIStrings", typeof(Mainform).Assembly);
 
     private const string DefaultLanguagesPath = "";
 
@@ -29,7 +29,7 @@ public partial class Form1 : Form
     private bool _hasUnsavedChanges;
     private string _uiLanguage = "de";
 
-    public Form1()
+    public Mainform()
     {
         InitializeComponent();
         Width = 1450;
@@ -101,3 +101,4 @@ public partial class Form1 : Form
         public Dictionary<string, Dictionary<string, string>> ValidEntries { get; set; } = new(StringComparer.Ordinal);
     }
 }
+

@@ -1,6 +1,6 @@
-namespace LanguageFileEditor;
+﻿namespace LanguageFileEditor;
 
-public partial class Form1
+public partial class Mainform
 {
     private void WireEvents()
     {
@@ -135,3 +135,4 @@ public partial class Form1
         UpdateStatus(SF("status.copiedPath", path));
     }
 }
+

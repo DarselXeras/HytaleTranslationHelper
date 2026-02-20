@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hytale Translation Helper (Electron)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="toolbar">
+    <button id="btnChooseFolder">Ordner wählen</button>
+    <select id="selFile"></select>
+    <button id="btnRefresh">Aktualisieren</button>
+    <button id="btnSave">Speichern</button>
+    <button id="btnImportJson">JSON Import</button>
+    <button id="btnExportJson">JSON Export</button>
+    <button id="btnCreateLanguage">Neue Sprache</button>
+    <button id="btnSettings">Übersetzungs-URL</button>
+    <select id="selUiLang">
+      <option value="de">Deutsch</option>
+      <option value="en">English</option>
+    </select>
+  </header>
+
+  <section class="filterbar">
+    <input id="txtSearch" placeholder="Key suchen..." />
+    <label><input type="checkbox" id="chkMissing" /> Nur fehlende</label>
+    <button id="btnFilter">Filter</button>
+    <button id="btnNextMissing">Nächstes fehlendes</button>
+    <button id="btnAutoTranslate">Auto-Übersetzung</button>
+    <button id="btnCopyKey">Key kopieren</button>
+  </section>
+
+  <main class="layout">
+    <aside class="left">
+      <div id="tree" class="tree"></div>
+    </aside>
+    <section class="right">
+      <div id="selectedKey">Key: -</div>
+      <div id="editors"></div>
+    </section>
+  </main>
+
+  <footer id="status">Bereit.</footer>
+
+  <div id="treeContextMenu" class="context-menu hidden">
+    <button id="ctxAddEntry">Neuen Eintrag hier hinzufügen</button>
+  </div>
+
+  <div id="modalBackdrop" class="modal-backdrop hidden">
+    <div class="modal">
+      <h3 id="modalTitle"></h3>
+      <div id="modalBody"></div>
+      <div class="modal-actions">
+        <button id="modalCancel">Abbrechen</button>
+        <button id="modalOk">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

@@ -416,3 +416,10 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+mod/dist/win-unpacked
+**/mod/dist/*.exe
+
+mod/dist/
+mod/node_modules/
+mod/.cache/
+mod/*.log

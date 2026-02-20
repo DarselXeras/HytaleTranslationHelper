@@ -1,9 +1,9 @@
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 
 namespace LanguageFileEditor;
 
-public partial class Form1
+public partial class Mainform
 {
     private void ExportJson()
     {
@@ -248,3 +248,4 @@ public partial class Form1
         };
     }
 }
+
