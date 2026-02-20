@@ -41,6 +41,7 @@ partial class Form1
         _menuMain = new MenuStrip();
         _mnuDatei = new ToolStripMenuItem();
         _mnuDateiOrdner = new ToolStripMenuItem();
+        _mnuDateiDateiWaehlen = new ToolStripMenuItem();
         _mnuDateiLaden = new ToolStripMenuItem();
         _mnuDateiSpeichern = new ToolStripMenuItem();
         toolStripSeparator1 = new ToolStripSeparator();
@@ -57,7 +58,9 @@ partial class Form1
         _mnuToolsAutoTranslate = new ToolStripMenuItem();
         _mnuAnsicht = new ToolStripMenuItem();
         _mnuAnsichtToggleTreeWidth = new ToolStripMenuItem();
-        _mnuToolsJsonTools = new ToolStripMenuItem();
+        _mnuSprache = new ToolStripMenuItem();
+        _mnuLangDe = new ToolStripMenuItem();
+        _mnuLangEn = new ToolStripMenuItem();
         _filterBar = new TableLayoutPanel();
         _lblSearch = new Label();
         _treeMenu.SuspendLayout();
@@ -258,7 +261,7 @@ partial class Form1
         // 
         // _menuMain
         // 
-        _menuMain.Items.AddRange(new ToolStripItem[] { _mnuDatei, _mnuBearbeiten, _mnuTools, _mnuAnsicht });
+        _menuMain.Items.AddRange(new ToolStripItem[] { _mnuDatei, _mnuBearbeiten, _mnuTools, _mnuAnsicht, _mnuSprache });
         _menuMain.Location = new Point(0, 0);
         _menuMain.Name = "_menuMain";
         _menuMain.Size = new Size(1173, 24);
@@ -266,7 +269,7 @@ partial class Form1
         // 
         // _mnuDatei
         // 
-        _mnuDatei.DropDownItems.AddRange(new ToolStripItem[] { _mnuDateiOrdner, _mnuDateiLaden, _mnuDateiSpeichern, toolStripSeparator1, _mnuDateiJsonImport, _mnuDateiJsonExport, toolStripSeparator2, _mnuDateiBeenden });
+        _mnuDatei.DropDownItems.AddRange(new ToolStripItem[] { _mnuDateiOrdner, _mnuDateiDateiWaehlen, _mnuDateiLaden, _mnuDateiSpeichern, toolStripSeparator1, _mnuDateiJsonImport, _mnuDateiJsonExport, toolStripSeparator2, _mnuDateiBeenden });
         _mnuDatei.Name = "_mnuDatei";
         _mnuDatei.Size = new Size(46, 20);
         _mnuDatei.Text = "Datei";
@@ -276,6 +279,12 @@ partial class Form1
         _mnuDateiOrdner.Name = "_mnuDateiOrdner";
         _mnuDateiOrdner.Size = new Size(223, 22);
         _mnuDateiOrdner.Text = "Languages-Ordner wählen...";
+        // 
+        // _mnuDateiDateiWaehlen
+        // 
+        _mnuDateiDateiWaehlen.Name = "_mnuDateiDateiWaehlen";
+        _mnuDateiDateiWaehlen.Size = new Size(223, 22);
+        _mnuDateiDateiWaehlen.Text = "Sprachdatei wählen...";
         // 
         // _mnuDateiLaden
         // 
@@ -374,11 +383,24 @@ partial class Form1
         _mnuAnsichtToggleTreeWidth.Size = new Size(205, 22);
         _mnuAnsichtToggleTreeWidth.Text = "Baum-Breite umschalten";
         // 
-        // _mnuToolsJsonTools
+        // _mnuSprache
         // 
-        _mnuToolsJsonTools.Name = "_mnuToolsJsonTools";
-        _mnuToolsJsonTools.Size = new Size(32, 19);
-        _mnuToolsJsonTools.Text = "JSON-Werkzeuge...";
+        _mnuSprache.DropDownItems.AddRange(new ToolStripItem[] { _mnuLangDe, _mnuLangEn });
+        _mnuSprache.Name = "_mnuSprache";
+        _mnuSprache.Size = new Size(61, 20);
+        _mnuSprache.Text = "Sprache";
+        // 
+        // _mnuLangDe
+        // 
+        _mnuLangDe.Name = "_mnuLangDe";
+        _mnuLangDe.Size = new Size(117, 22);
+        _mnuLangDe.Text = "Deutsch";
+        // 
+        // _mnuLangEn
+        // 
+        _mnuLangEn.Name = "_mnuLangEn";
+        _mnuLangEn.Size = new Size(117, 22);
+        _mnuLangEn.Text = "English";
         // 
         // _filterBar
         // 
@@ -470,6 +492,7 @@ partial class Form1
     private MenuStrip _menuMain;
     private ToolStripMenuItem _mnuDatei;
     private ToolStripMenuItem _mnuDateiOrdner;
+    private ToolStripMenuItem _mnuDateiDateiWaehlen;
     private ToolStripMenuItem _mnuDateiLaden;
     private ToolStripMenuItem _mnuDateiSpeichern;
     private ToolStripMenuItem _mnuDateiJsonImport;
@@ -482,8 +505,10 @@ partial class Form1
     private ToolStripMenuItem _mnuBearbeitenCopyPath;
     private ToolStripMenuItem _mnuTools;
     private ToolStripMenuItem _mnuToolsAutoTranslate;
-    private ToolStripMenuItem _mnuToolsJsonTools;
     private ToolStripMenuItem _mnuAnsicht;
+    private ToolStripMenuItem _mnuSprache;
+    private ToolStripMenuItem _mnuLangDe;
+    private ToolStripMenuItem _mnuLangEn;
     private ToolStripMenuItem _mnuAnsichtToggleTreeWidth;
     private ToolStripSeparator toolStripSeparator1;
     private ToolStripSeparator toolStripSeparator2;

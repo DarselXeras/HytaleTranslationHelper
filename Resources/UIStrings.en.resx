@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+
+  <data name="app.title" xml:space="preserve"><value>Hytale Language File Editor</value></data>
+  <data name="menu.file" xml:space="preserve"><value>File</value></data>
+  <data name="menu.file.chooseFolder" xml:space="preserve"><value>Choose Languages folder...</value></data>
+  <data name="menu.file.chooseFile" xml:space="preserve"><value>Choose language file...</value></data>
+  <data name="menu.file.refresh" xml:space="preserve"><value>Refresh list</value></data>
+  <data name="menu.file.save" xml:space="preserve"><value>Save</value></data>
+  <data name="menu.file.import" xml:space="preserve"><value>Import JSON...</value></data>
+  <data name="menu.file.export" xml:space="preserve"><value>Export JSON...</value></data>
+  <data name="menu.file.exit" xml:space="preserve"><value>Exit</value></data>
+  <data name="menu.edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="menu.edit.addKey" xml:space="preserve"><value>Add key</value></data>
+  <data name="menu.edit.deleteKey" xml:space="preserve"><value>Delete key</value></data>
+  <data name="menu.edit.nextMissing" xml:space="preserve"><value>Next missing field</value></data>
+  <data name="menu.edit.copyPath" xml:space="preserve"><value>Copy path to here</value></data>
+  <data name="addEntry.context" xml:space="preserve"><value>Add new entry here</value></data>
+  <data name="menu.tools" xml:space="preserve"><value>Tools</value></data>
+  <data name="menu.tools.autoTranslate" xml:space="preserve"><value>Auto-translate (current key)</value></data>
+  <data name="menu.view" xml:space="preserve"><value>View</value></data>
+  <data name="menu.view.toggleTree" xml:space="preserve"><value>Toggle tree width</value></data>
+  <data name="menu.language" xml:space="preserve"><value>Language</value></data>
+  <data name="filter.title" xml:space="preserve"><value>Search/Filter</value></data>
+  <data name="filter.placeholder" xml:space="preserve"><value>Search key...</value></data>
+  <data name="filter.onlyMissing" xml:space="preserve"><value>Only missing</value></data>
+  <data name="filter.apply" xml:space="preserve"><value>Filter</value></data>
+  <data name="filter.nextMissing" xml:space="preserve"><value>Next missing</value></data>
+  <data name="status.ready" xml:space="preserve"><value>Ready.</value></data>
+  <data name="status.copiedPath" xml:space="preserve"><value>Path copied: {0}</value></data>
+  <data name="status.summary" xml:space="preserve"><value>Languages: {0} | Keys: {1} | Missing translations: {2}</value></data>
+  <data name="common.notice" xml:space="preserve"><value>Notice</value></data>
+  <data name="common.info" xml:space="preserve"><value>Info</value></data>
+  <data name="common.delete" xml:space="preserve"><value>Delete</value></data>
+</root>

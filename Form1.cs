@@ -1,6 +1,8 @@
 ﻿using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Globalization;
+using System.Resources;
 
 namespace LanguageFileEditor;
 
@@ -11,6 +13,7 @@ public partial class Form1 : Form
     private readonly Dictionary<string, Dictionary<string, string>> _langData = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, TextBox> _langEditors = new(StringComparer.OrdinalIgnoreCase);
     private static readonly HttpClient _http = new() { Timeout = TimeSpan.FromSeconds(20) };
+    private static readonly ResourceManager _rm = new("LanguageFileEditor.Resources.UIStrings", typeof(Form1).Assembly);
     private const string DefaultLanguagesPath = @"F:\Games\Hytale\UserData\Saves\Modding Test\mods\DarselX_EndlessEmber\Server\Languages";
     private static readonly string _stateFilePath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -23,6 +26,7 @@ public partial class Form1 : Form
     private string? _selectedKey;
     private bool _isBinding;
     private bool _hasUnsavedChanges;
+    private string _uiLanguage = "de";
 
     public Form1()
     {
@@ -34,8 +38,9 @@ public partial class Form1 : Form
         ApplyFormIcon();
 
         LoadStartupPath();
+        ApplyLanguage();
         EnsureSelectedLangFile();
-        UpdateStatus("Bereit.");
+        UpdateStatus(S("status.ready"));
     }
 
     private void WireEvents()
@@ -52,6 +57,7 @@ public partial class Form1 : Form
 
         // Menu actions
         _mnuDateiOrdner.Click += (_, _) => BrowseFolder();
+        _mnuDateiDateiWaehlen.Click += (_, _) => SelectLanguageFileAndLoad();
         _mnuDateiLaden.Click += (_, _) => RefreshListAndReload();
         _mnuDateiSpeichern.Click += (_, _) => SaveAll();
         _mnuDateiJsonImport.Click += (_, _) => ImportJson();
@@ -66,6 +72,8 @@ public partial class Form1 : Form
         _mnuToolsAutoTranslate.Click += async (_, _) => await AutoTranslateSelectedKeyAsync();
 
         _mnuAnsichtToggleTreeWidth.Click += (_, _) => ToggleTreeWidth();
+        _mnuLangDe.Click += (_, _) => SetLanguage("de");
+        _mnuLangEn.Click += (_, _) => SetLanguage("en");
 
         _txtSearch.KeyDown += SearchKeyDown;
         _chkOnlyMissing.CheckedChanged += (_, _) => ApplyFilters();
@@ -95,6 +103,66 @@ public partial class Form1 : Form
         {
             // ignore icon load errors
         }
+    }
+
+    private string S(string key)
+        => _rm.GetString(key, CultureInfo.GetCultureInfo(_uiLanguage)) ?? key;
+
+    private string SF(string key, params object[] args)
+        => string.Format(S(key), args);
+
+    // Legacy helper while migrating remaining texts to resource keys.
+    private string T(string de, string en) => _uiLanguage == "en" ? en : de;
+
+    private void SetLanguage(string lang)
+    {
+        _uiLanguage = string.Equals(lang, "en", StringComparison.OrdinalIgnoreCase) ? "en" : "de";
+        ApplyLanguage();
+        SaveStartupPath();
+    }
+
+    private void ApplyLanguage()
+    {
+        Text = S("app.title");
+
+        _mnuDatei.Text = S("menu.file");
+        _mnuDateiOrdner.Text = S("menu.file.chooseFolder");
+        _mnuDateiDateiWaehlen.Text = S("menu.file.chooseFile");
+        _mnuDateiLaden.Text = S("menu.file.refresh");
+        _mnuDateiSpeichern.Text = S("menu.file.save");
+        _mnuDateiJsonImport.Text = S("menu.file.import");
+        _mnuDateiJsonExport.Text = S("menu.file.export");
+        _mnuDateiBeenden.Text = S("menu.file.exit");
+
+        _mnuBearbeiten.Text = S("menu.edit");
+        _mnuBearbeitenAddKey.Text = S("menu.edit.addKey");
+        _mnuBearbeitenDeleteKey.Text = S("menu.edit.deleteKey");
+        _mnuBearbeitenNextMissing.Text = S("menu.edit.nextMissing");
+        _mnuBearbeitenCopyPath.Text = S("menu.edit.copyPath");
+
+        _mnuTools.Text = S("menu.tools");
+        _mnuToolsAutoTranslate.Text = S("menu.tools.autoTranslate");
+
+        _mnuAnsicht.Text = S("menu.view");
+        _mnuAnsichtToggleTreeWidth.Text = S("menu.view.toggleTree");
+
+        _mnuSprache.Text = S("menu.language");
+        _mnuLangDe.Text = "Deutsch";
+        _mnuLangEn.Text = "English";
+        _mnuLangDe.Checked = _uiLanguage == "de";
+        _mnuLangEn.Checked = _uiLanguage == "en";
+
+        _lblSearch.Text = S("filter.title");
+        _txtSearch.PlaceholderText = S("filter.placeholder");
+        _chkOnlyMissing.Text = S("filter.onlyMissing");
+        _btnApplyFilter.Text = S("filter.apply");
+        _btnNextMissing.Text = S("filter.nextMissing");
+
+        _miCopyPathAtNode.Text = S("menu.edit.copyPath");
+        _miAddEntryAtNode.Text = S("addEntry.context");
+
+        if (_languages.Count == 0)
+            _lblStatus.Text = S("status.ready");
     }
 
     private void TreeKeyDown(object? sender, KeyEventArgs e)
@@ -152,21 +220,21 @@ public partial class Form1 : Form
         if (string.IsNullOrWhiteSpace(path)) return;
 
         Clipboard.SetText(path);
-        UpdateStatus($"Pfad kopiert: {path}");
+        UpdateStatus(SF("status.copiedPath", path));
     }
 
     private void AddEntryAtSelectedNode()
     {
         if (_languages.Count == 0)
         {
-            MessageBox.Show(this, "Bitte zuerst eine Sprachdatei laden.");
+            MessageBox.Show(this, T("Bitte zuerst eine Sprachdatei laden.","Please load a language file first."));
             return;
         }
 
         var node = _tree.SelectedNode;
         if (node is null)
         {
-            MessageBox.Show(this, "Bitte einen Knoten auswÃ¤hlen.");
+            MessageBox.Show(this, T("Bitte einen Knoten auswÃ¤hlen.", "Please select a node."));
             return;
         }
 
@@ -175,7 +243,7 @@ public partial class Form1 : Form
         var prefixNode = node.Tag is string ? node.Parent : node;
         if (prefixNode is null)
         {
-            MessageBox.Show(this, "Bitte keinen Root-Leaf ohne Prefix wÃ¤hlen.");
+            MessageBox.Show(this, T("Bitte keinen Root-Leaf ohne Prefix wÃ¤hlen.", "Please do not select a root leaf without prefix."));
             return;
         }
 
@@ -196,7 +264,7 @@ public partial class Form1 : Form
 
         if (suffix.Contains('.'))
         {
-            MessageBox.Show(this, "Bitte nur den letzten Key-Teil eingeben (ohne Punkt).", "Hinweis", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, T("Bitte nur den letzten Key-Teil eingeben (ohne Punkt).", "Please enter only the last key segment (without dot)."), T("Hinweis","Notice"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 
@@ -204,7 +272,7 @@ public partial class Form1 : Form
         var exists = _langData.Values.Any(d => d.ContainsKey(newKey));
         if (exists)
         {
-            MessageBox.Show(this, $"Key existiert bereits:\n{newKey}", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, (_uiLanguage=="en" ? $"Key already exists:\n{newKey}" : $"Key existiert bereits:\n{newKey}"), T("Info","Info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 
@@ -239,11 +307,13 @@ public partial class Form1 : Form
             var candidate = !string.IsNullOrWhiteSpace(state?.RootPath) ? state!.RootPath : DefaultLanguagesPath;
             _rootPath = candidate;
             _selectedLangFileName = string.IsNullOrWhiteSpace(state?.SelectedLangFileName) ? null : state!.SelectedLangFileName;
+            _uiLanguage = string.Equals(state?.UiLanguage, "en", StringComparison.OrdinalIgnoreCase) ? "en" : "de";
         }
         catch
         {
             _rootPath = DefaultLanguagesPath;
             _selectedLangFileName = null;
+            _uiLanguage = "de";
         }
     }
 
@@ -257,7 +327,8 @@ public partial class Form1 : Form
             var state = new AppState
             {
                 RootPath = _rootPath,
-                SelectedLangFileName = _selectedLangFileName ?? string.Empty
+                SelectedLangFileName = _selectedLangFileName ?? string.Empty,
+                UiLanguage = _uiLanguage
             };
             var json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(_stateFilePath, json, Encoding.UTF8);
@@ -287,9 +358,7 @@ public partial class Form1 : Form
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .OrderBy(x => x)
             .ToList();
-    }
-
-    private bool EnsureSelectedLangFile(bool promptIfMultiple = false)
+    }    private bool EnsureSelectedLangFile(bool promptIfMultiple = false)
     {
         var files = GetAvailableLangFiles(_rootPath);
         if (files.Count == 0)
@@ -315,23 +384,52 @@ public partial class Form1 : Form
             return true;
         }
 
-        var options = string.Join(Environment.NewLine, files.Select((f, i) => $"{i + 1}. {f}"));
-        var input = Microsoft.VisualBasic.Interaction.InputBox(
-            $"Mehrere .lang-Dateien gefunden. Bitte Namen eingeben:{Environment.NewLine}{Environment.NewLine}{options}",
-            "Datei wählen",
-            files[0]);
-
-        if (string.IsNullOrWhiteSpace(input)) return false;
-        var selected = files.FirstOrDefault(f => string.Equals(f, input.Trim(), StringComparison.OrdinalIgnoreCase));
-        if (selected is null)
-        {
-            MessageBox.Show(this, "Datei nicht gefunden.", "Hinweis", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return false;
-        }
+        var selected = ChooseLanguageFile(files, files[0]);
+        if (selected is null) return false;
 
         _selectedLangFileName = selected;
         SaveStartupPath();
         return true;
+    }
+
+    private string? ChooseLanguageFile(IReadOnlyList<string> files, string? preselect = null)
+    {
+        using var dlg = new Form
+        {
+            Text = S("menu.file.chooseFile"),
+            Width = 520,
+            Height = 420,
+            StartPosition = FormStartPosition.CenterParent,
+            FormBorderStyle = FormBorderStyle.Sizable,
+            MinimizeBox = false,
+            MaximizeBox = false
+        };
+
+        var list = new ListBox { Dock = DockStyle.Fill };
+        list.Items.AddRange(files.Cast<object>().ToArray());
+
+        if (!string.IsNullOrWhiteSpace(preselect))
+        {
+            var idx = files.ToList().FindIndex(x => string.Equals(x, preselect, StringComparison.OrdinalIgnoreCase));
+            if (idx >= 0) list.SelectedIndex = idx;
+        }
+        if (list.SelectedIndex < 0 && list.Items.Count > 0) list.SelectedIndex = 0;
+
+        var btnOk = new Button { Text = "OK", DialogResult = DialogResult.OK, AutoSize = true };
+        var btnCancel = new Button { Text = _uiLanguage == "en" ? "Cancel" : "Abbrechen", DialogResult = DialogResult.Cancel, AutoSize = true };
+
+        var buttons = new FlowLayoutPanel { Dock = DockStyle.Bottom, Height = 44, FlowDirection = FlowDirection.RightToLeft, Padding = new Padding(8) };
+        buttons.Controls.Add(btnOk);
+        buttons.Controls.Add(btnCancel);
+
+        list.DoubleClick += (_, _) => { if (list.SelectedItem is not null) dlg.DialogResult = DialogResult.OK; };
+
+        dlg.AcceptButton = btnOk;
+        dlg.CancelButton = btnCancel;
+        dlg.Controls.Add(list);
+        dlg.Controls.Add(buttons);
+
+        return dlg.ShowDialog(this) == DialogResult.OK ? list.SelectedItem?.ToString() : null;
     }
 
     private bool ConfirmSaveIfNeeded()
@@ -339,8 +437,8 @@ public partial class Form1 : Form
         if (!_hasUnsavedChanges) return true;
 
         var res = MessageBox.Show(this,
-            "Es gibt ungespeicherte Änderungen. Vor dem Fortfahren speichern?",
-            "Ungespeicherte Änderungen",
+            T("Es gibt ungespeicherte Ã„nderungen. Vor dem Fortfahren speichern?", "There are unsaved changes. Save before continuing?"),
+            T("Ungespeicherte Ã„nderungen", "Unsaved changes"),
             MessageBoxButtons.YesNoCancel,
             MessageBoxIcon.Question);
 
@@ -350,14 +448,31 @@ public partial class Form1 : Form
         SaveAll();
         return !_hasUnsavedChanges;
     }
+    private void SelectLanguageFileAndLoad()
+    {
+        if (!ConfirmSaveIfNeeded()) return;
 
+        var files = GetAvailableLangFiles(_rootPath);
+        if (files.Count == 0)
+        {
+            MessageBox.Show(this, T("Keine .lang-Datei gefunden/ausgewählt.", "No .lang file found/selected."), T("Hinweis", "Notice"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+
+        var selected = ChooseLanguageFile(files, _selectedLangFileName ?? files[0]);
+        if (string.IsNullOrWhiteSpace(selected)) return;
+
+        _selectedLangFileName = selected;
+        SaveStartupPath();
+        LoadAll();
+    }
     private void RefreshListAndReload()
     {
         if (!ConfirmSaveIfNeeded()) return;
         _selectedLangFileName = null;
         if (!EnsureSelectedLangFile(promptIfMultiple: true))
         {
-            MessageBox.Show(this, "Keine .lang-Datei gefunden/ausgewählt.", "Hinweis", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, T("Keine .lang-Datei gefunden/ausgewÃ¤hlt.", "No .lang file found/selected."), T("Hinweis","Notice"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 
@@ -377,7 +492,7 @@ public partial class Form1 : Form
         if (!EnsureSelectedLangFile(promptIfMultiple: true))
         {
             SaveStartupPath();
-            MessageBox.Show(this, "Im gewählten Ordner wurden keine .lang-Dateien gefunden.", "Hinweis", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, T("Im gewÃ¤hlten Ordner wurden keine .lang-Dateien gefunden.", "No .lang files were found in the selected folder."), T("Hinweis","Notice"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 
@@ -390,8 +505,8 @@ public partial class Form1 : Form
         try
         {
             var root = _rootPath.Trim();
-            if (!Directory.Exists(root)) throw new DirectoryNotFoundException("Languages-Ordner nicht gefunden.");
-            if (!EnsureSelectedLangFile(promptIfMultiple: true)) throw new InvalidOperationException("Keine .lang-Datei ausgewählt.");
+            if (!Directory.Exists(root)) throw new DirectoryNotFoundException(T("Languages-Ordner nicht gefunden.","Languages folder not found."));
+            if (!EnsureSelectedLangFile(promptIfMultiple: true)) throw new InvalidOperationException(T("Keine .lang-Datei ausgewÃ¤hlt.", "No .lang file selected."));
             SaveStartupPath();
 
             var fileName = _selectedLangFileName!;
@@ -417,7 +532,7 @@ public partial class Form1 : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, ex.Message, "Laden fehlgeschlagen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, ex.Message, T("Laden fehlgeschlagen","Loading failed"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -513,14 +628,14 @@ public partial class Form1 : Form
     {
         if (_languages.Count == 0)
         {
-            MessageBox.Show(this, "Bitte zuerst eine Sprachdatei laden.");
+            MessageBox.Show(this, T("Bitte zuerst eine Sprachdatei laden.","Please load a language file first."));
             return;
         }
 
         var keys = GetFilteredKeys();
         if (keys.Count == 0)
         {
-            UpdateStatus("Keine Keys im aktuellen Filter.");
+            UpdateStatus(T("Keine Keys im aktuellen Filter.","No keys in current filter."));
             return;
         }
 
@@ -638,14 +753,14 @@ public partial class Form1 : Form
 
     private void AddKey()
     {
-        var key = Microsoft.VisualBasic.Interaction.InputBox("Neuer Key:", "Key hinzufÃ¼gen", "Items.MyMod.NewKey.name");
+        var key = Microsoft.VisualBasic.Interaction.InputBox(T("Neuer Key:","New key:"), "Key hinzufÃ¼gen", "Items.MyMod.NewKey.name");
         if (string.IsNullOrWhiteSpace(key)) return;
         key = key.Trim();
 
         var exists = _langData.Values.Any(d => d.ContainsKey(key));
         if (exists)
         {
-            MessageBox.Show(this, "Key existiert bereits.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, T("Key existiert bereits.","Key already exists."), T("Info","Info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 
@@ -664,11 +779,11 @@ public partial class Form1 : Form
     {
         if (_selectedKey is null)
         {
-            MessageBox.Show(this, "Bitte erst einen Key auswÃ¤hlen.");
+            MessageBox.Show(this, T("Bitte erst einen Key auswÃ¤hlen.", "Please select a key first."));
             return;
         }
 
-        var res = MessageBox.Show(this, $"Key lÃ¶schen?\n{_selectedKey}", "LÃ¶schen", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        var res = MessageBox.Show(this, (_uiLanguage=="en" ? $"Delete key?\n{_selectedKey}" : $"Key lÃ¶schen?\n{_selectedKey}"), T("LÃ¶schen", "Delete"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         if (res != DialogResult.Yes) return;
 
         foreach (var lang in _languages) _langData[lang].Remove(_selectedKey);
@@ -702,9 +817,9 @@ public partial class Form1 : Form
     {
         try
         {
-            if (_languages.Count == 0) throw new InvalidOperationException("Bitte zuerst laden.");
+            if (_languages.Count == 0) throw new InvalidOperationException(T("Bitte zuerst laden.","Please load first."));
             var root = _rootPath.Trim();
-            if (!EnsureSelectedLangFile(promptIfMultiple: true)) throw new InvalidOperationException("Dateiname fehlt.");
+            if (!EnsureSelectedLangFile(promptIfMultiple: true)) throw new InvalidOperationException(T("Dateiname fehlt.","File name missing."));
             var fileName = _selectedLangFileName!;
 
             var keys = _langData.Values.SelectMany(d => d.Keys).Distinct(StringComparer.Ordinal).OrderBy(k => k).ToList();
@@ -722,11 +837,11 @@ public partial class Form1 : Form
             }
 
             _hasUnsavedChanges = false;
-            UpdateStatus("Gespeichert.");
+            UpdateStatus(T("Gespeichert.","Saved."));
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, ex.Message, "Speichern fehlgeschlagen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, ex.Message, T("Speichern fehlgeschlagen","Save failed"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -734,13 +849,13 @@ public partial class Form1 : Form
     {
         try
         {
-            if (_languages.Count == 0) throw new InvalidOperationException("Bitte zuerst laden.");
+            if (_languages.Count == 0) throw new InvalidOperationException(T("Bitte zuerst laden.","Please load first."));
 
             using var dlg = new SaveFileDialog
             {
                 Filter = "JSON (*.json)|*.json|Alle Dateien (*.*)|*.*",
                 FileName = (_selectedLangFileName ?? "languages") + ".json",
-                Title = "Language JSON exportieren"
+                Title = T("Language JSON exportieren","Export language JSON")
             };
 
             if (dlg.ShowDialog(this) != DialogResult.OK) return;
@@ -766,11 +881,11 @@ public partial class Form1 : Form
 
             var json = JsonSerializer.Serialize(export, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(dlg.FileName, json, new UTF8Encoding(false));
-            UpdateStatus($"JSON exportiert: {Path.GetFileName(dlg.FileName)}");
+            UpdateStatus(_uiLanguage == "en" ? $"JSON exported: {Path.GetFileName(dlg.FileName)}" : $"JSON exportiert: {Path.GetFileName(dlg.FileName)}");
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, ex.Message, "JSON Export fehlgeschlagen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, ex.Message, T("JSON Export fehlgeschlagen","JSON export failed"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -781,7 +896,7 @@ public partial class Form1 : Form
             using var dlg = new OpenFileDialog
             {
                 Filter = "JSON (*.json)|*.json|Alle Dateien (*.*)|*.*",
-                Title = "Language JSON importieren"
+                Title = T("Language JSON importieren","Import language JSON")
             };
 
             if (dlg.ShowDialog(this) != DialogResult.OK) return;
@@ -796,27 +911,27 @@ public partial class Form1 : Form
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList() ?? [];
 
-            if (incomingLangs.Count == 0) throw new InvalidOperationException("JSON enthÃ¤lt keine Sprachen.");
-            if (import.Entries is null || import.Entries.Count == 0) throw new InvalidOperationException("JSON enthÃ¤lt keine EintrÃ¤ge.");
+            if (incomingLangs.Count == 0) throw new InvalidOperationException(T("JSON enthÃ¤lt keine Sprachen.", "JSON contains no languages."));
+            if (import.Entries is null || import.Entries.Count == 0) throw new InvalidOperationException(T("JSON enthÃ¤lt keine EintrÃ¤ge.", "JSON contains no entries."));
 
             var preview = BuildImportPreview(import, incomingLangs);
             if (!preview.CanImport)
             {
-                MessageBox.Show(this, preview.Message, "JSON Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, preview.Message, T("JSON Validation","JSON validation"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             var proceed = MessageBox.Show(this,
-                preview.Message + "\n\nImport fortsetzen?",
-                "JSON Preview / Validation",
+                preview.Message + (_uiLanguage=="en" ? "\n\nContinue import?" : "\n\nImport fortsetzen?"),
+                T("JSON Vorschau / Validierung","JSON Preview / Validation"),
                 MessageBoxButtons.YesNo,
                 preview.WarningCount > 0 ? MessageBoxIcon.Warning : MessageBoxIcon.Information);
 
             if (proceed != DialogResult.Yes) return;
 
             var replace = MessageBox.Show(this,
-                "Bestehende Daten ersetzen?\nJa = ersetzen, Nein = zusammenfÃ¼hren",
-                "JSON Import",
+                T("Bestehende Daten ersetzen?\nJa = ersetzen, Nein = zusammenfÃ¼hren", "Replace existing data?\nYes = replace, No = merge"),
+                T("JSON Import","JSON Import"),
                 MessageBoxButtons.YesNoCancel,
                 MessageBoxIcon.Question);
 
@@ -869,11 +984,11 @@ public partial class Form1 : Form
             BuildEditors();
             ApplyFilters();
             _hasUnsavedChanges = true;
-            UpdateStatus($"JSON importiert: {Path.GetFileName(dlg.FileName)}");
+            UpdateStatus(_uiLanguage == "en" ? $"JSON imported: {Path.GetFileName(dlg.FileName)}" : $"JSON importiert: {Path.GetFileName(dlg.FileName)}");
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, ex.Message, "JSON Import fehlgeschlagen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, ex.Message, T("JSON Import fehlgeschlagen","JSON import failed"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -935,7 +1050,7 @@ public partial class Form1 : Form
         var lines = new List<string>
         {
             $"Datei: {import.FileName}",
-            $"Sprachen: {incomingLangs.Count} ({string.Join(", ", incomingLangs)})",
+            (_uiLanguage=="en" ? $"Languages: {incomingLangs.Count} ({string.Join(", ", incomingLangs)})" : $"Sprachen: {incomingLangs.Count} ({string.Join(", ", incomingLangs)})"),
             $"EintrÃ¤ge gesamt: {import.Entries.Count}",
             $"EintrÃ¤ge importierbar: {validEntries.Count}"
         };
@@ -954,7 +1069,7 @@ public partial class Form1 : Form
         if (warnings.Count > 0)
         {
             lines.Add(string.Empty);
-            lines.Add("Validation-Hinweise:");
+            lines.Add(_uiLanguage=="en" ? "Validation notes:" : "Validation-Hinweise:");
             lines.AddRange(warnings.Select(w => "- " + w));
         }
 
@@ -979,20 +1094,20 @@ public partial class Form1 : Form
         {
             if (_selectedKey is null)
             {
-                MessageBox.Show(this, "Bitte zuerst einen Key auswÃ¤hlen.");
+                MessageBox.Show(this, T("Bitte zuerst einen Key auswÃ¤hlen.", "Please select a key first."));
                 return;
             }
 
             if (_languages.Count < 2)
             {
-                MessageBox.Show(this, "Mindestens 2 Sprachen nÃ¶tig.");
+                MessageBox.Show(this, T("Mindestens 2 Sprachen nÃ¶tig.", "At least 2 languages required."));
                 return;
             }
 
             // optional URL override
             var customUrl = Microsoft.VisualBasic.Interaction.InputBox(
-                "LibreTranslate URL (leer lassen = Standard)",
-                "Auto-Ãœbersetzen",
+                T("LibreTranslate URL (leer lassen = Standard)","LibreTranslate URL (leave empty = default)"),
+                T("Auto-Ãœbersetzen", "Auto-translate"),
                 _translateUrl);
             if (!string.IsNullOrWhiteSpace(customUrl)) _translateUrl = NormalizeTranslateUrl(customUrl.Trim());
 
@@ -1024,11 +1139,11 @@ public partial class Form1 : Form
             }
 
             if (changed > 0) _hasUnsavedChanges = true;
-            UpdateStatus(changed > 0 ? $"Auto-Ãœbersetzt: {changed} Feld(er)." : "Nichts zu Ã¼bersetzen.");
+            UpdateStatus(changed > 0 ? (_uiLanguage=="en" ? $"Auto-translated: {changed} field(s)." : $"Auto-Ãœbersetzt: {changed} Feld(er).") : T("Nichts zu Ã¼bersetzen.", "Nothing to translate."));
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, ex.Message, "Auto-Ãœbersetzen fehlgeschlagen", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, ex.Message, T("Auto-Ãœbersetzen fehlgeschlagen", "Auto-translation failed"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
         {
@@ -1173,7 +1288,7 @@ public partial class Form1 : Form
 
         if (_languages.Count == 0)
         {
-            _lblStatus.Text = "Bereit.";
+            _lblStatus.Text = S("status.ready");
             return;
         }
 
@@ -1187,13 +1302,13 @@ public partial class Form1 : Form
             }
         }
 
-        _lblStatus.Text = $"Sprachen: {_languages.Count} | Keys: {keyCount} | Fehlende Ãœbersetzungen: {missing}";
+        _lblStatus.Text = SF("status.summary", _languages.Count, keyCount, missing);
     }
-
     private sealed class AppState
     {
         public string RootPath { get; set; } = string.Empty;
         public string SelectedLangFileName { get; set; } = string.Empty;
+        public string UiLanguage { get; set; } = "de";
     }
 
     private sealed class JsonLanguageExport
@@ -1211,6 +1326,15 @@ public partial class Form1 : Form
         public Dictionary<string, Dictionary<string, string>> ValidEntries { get; set; } = new(StringComparer.Ordinal);
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 
