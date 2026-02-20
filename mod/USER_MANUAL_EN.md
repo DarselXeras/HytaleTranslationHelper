@@ -1,170 +1,160 @@
-# Hytale Translation Helper (Electron) — Detailed User Manual (EN)
+# Hytale Languagefile Editor (Electron) — Detailed User Manual (EN)
 
 ## 1) Overview
-Hytale Translation Helper (Electron) is a desktop tool for managing Hytale `.lang` files across multiple languages in one interface.
+**Hytale Languagefile Editor** is an external desktop tool for managing Hytale `.lang` files across multiple languages.
 
-It is designed for folder structures like:
-
+Typical structure:
 - `Languages/de-DE/<file>.lang`
 - `Languages/en-US/<file>.lang`
 - `Languages/fr-FR/<file>.lang`
 
-The app lets you:
-
-- edit translations side-by-side,
-- find missing entries quickly,
-- import/export JSON,
-- create new language folders with optional fallback,
-- add keys directly from the tree path,
-- auto-translate missing fields.
-
----
-
-## 2) Installation
-
-### Option A: Installer (recommended)
-1. Run the setup EXE (generated in `mod/dist/`).
-2. Follow installation steps.
-3. Start **Hytale Translation Helper** from Start Menu / Desktop.
-
-### Option B: Run from source
-1. Install Node.js (LTS recommended).
-2. Open terminal in `I:\Projekte\HytaleTranslationHelper\mod`.
-3. Run:
-   - `npm install`
-   - `npm start`
+Main capabilities:
+- Side-by-side translation editing
+- Missing-translation filtering/navigation
+- JSON import/export
+- Create new language folders (optional fallback)
+- Add keys directly from tree path (right click)
+- Auto-translation for empty target fields
 
 ---
 
-## 3) Build your own setup
-Use one of the included scripts in `mod/`:
+## 2) System Requirements
+- **OS:** Windows 10/11 (64-bit)
+- **CPU:** x64 processor
+- **RAM:** 4 GB minimum (8 GB recommended)
+- **Disk space:** ~500 MB free (app + temporary build/runtime files)
+- **Network:** Required for auto-translation endpoints (LibreTranslate/MyMemory)
+- **Permissions:** Read/write access to your mod language folders
 
-- `build-setup.ps1`
-- `build-setup.cmd`
+Notes:
+- Auto-translation needs internet access.
+- Unsigned EXE builds can trigger occasional antivirus false positives.
 
-PowerShell example:
+---
+
+## 3) Delivered Build (your current release)
+You are shipping this unpacked build:
+
+`I:\Projekte\HytaleTranslationHelper\mod\dist\win-unpacked\Hytale Languagefile Editor`
+
+Start the app via:
+
+`Hytale Languagefile Editor.exe`
+
+If needed, create a desktop shortcut to this EXE.
+
+---
+
+## 4) Installation Options
+### Option A: Portable / unpacked (current)
+1. Copy the full folder:
+   - `mod\dist\win-unpacked\Hytale Languagefile Editor`
+2. Run `Hytale Languagefile Editor.exe`.
+
+### Option B: Installer build (optional)
+From `mod/` run:
 
 ```powershell
-cd I:\Projekte\HytaleTranslationHelper\mod
 .\build-setup.ps1
 ```
 
-Output: `mod/dist/HytaleTranslationHelper-Setup-<version>.exe`
+Then use the generated setup in `mod\dist\`.
 
 ---
 
-## 4) Main UI layout
-
+## 5) Main UI Layout
 ### Top toolbar
-- **Choose folder**: Select your Languages root directory.
-- **File dropdown**: Select which `.lang` file to edit (e.g. `Items.lang`).
-- **Refresh**: Reload file list + data.
-- **Save**: Save all current changes.
-- **Import JSON** / **Export JSON**
+- **Choose folder**: Select Languages root directory
+- **File dropdown**: Select `.lang` file (e.g. `Items.lang`)
+- **Refresh**
+- **Save**
+- **Import JSON / Export JSON**
 - **Create language**
-- **Translation URL** (configure custom LibreTranslate endpoint)
-- **UI language**: Deutsch / English
+- **Translation URL**
+- **UI language** (DE/EN)
 
 ### Filter bar
-- Search field
-- **Only missing** toggle
-- **Filter** button
-- **Next missing** button
-- **Auto-translation** button
-- **Copy key** button
+- Search
+- Only missing
+- Filter
+- Next missing
+- Auto-translation
+- Copy key
 
 ### Main area
-- **Left**: hierarchical key tree
-- **Right**: selected key + text editors per language
+- **Left:** key tree
+- **Right:** selected key + language editors
 
 ### Bottom
-- Status line: language/key/missing counts and operation feedback.
+- Status line (languages, keys, missing count, operation feedback)
 
 ---
 
-## 5) First-time workflow
-1. Click **Choose folder** and pick your `Languages` root.
-2. Select a `.lang` file in the dropdown.
-3. Pick a key in the tree.
-4. Edit values in language text boxes.
-5. Click **Save**.
+## 6) First Start Workflow
+1. Click **Choose folder**.
+2. Select your `Languages` root.
+3. Select target `.lang` file from dropdown.
+4. Click a key in tree.
+5. Edit translations.
+6. Click **Save**.
 
 ---
 
-## 6) Editing keys and translations
+## 7) Editing and Key Management
+### Edit values
+- Modify text per language in right-side editors.
+- Unsaved changes are tracked automatically.
 
-## Select a key
-- Click any leaf in the tree.
-- The right panel updates with that key for all loaded languages.
+### Copy selected key
+- Click **Copy key** to copy full key path to clipboard.
 
-## Edit values
-- Type translations directly into each language text area.
-- Changes are tracked as unsaved until you click **Save**.
+### Add key from tree path (right click)
+- Right-click a tree node.
+- Enter **Label**.
+- App creates `<path>.<label>` in all languages with empty values.
 
-## Copy selected key
-- Click **Copy key** to copy the active key path (e.g. `Blocks.MyBlock.name`) to clipboard.
-
----
-
-## 7) Add new key from tree path (right click)
-You can add entries context-aware from the tree:
-
-1. Right-click a node in the tree.
-2. Enter **Label** in the dialog.
-3. Confirm.
-
-The app creates `<path>.<label>` in all languages with empty values.
-
-### Safety rule (important)
-If the clicked path is already a full key that contains translation text in at least one language, adding a sub-key below it is blocked.
-
-Example:
-- Existing translated key: `Blocks.DexPack_SPC.EmberTinkerbench.name`
-- Creating `...name.anything` is prevented.
+Safety rule:
+- If clicked path itself is already a translated terminal key, creating sub-keys below it is blocked.
 
 ---
 
-## 8) Search, missing filter, and navigation
-- Use the search box to filter keys by text.
-- Enable **Only missing** to see only incomplete keys.
-- Click **Next missing** to jump to the next unresolved key in current filter scope.
+## 8) Search / Missing Navigation
+- Search field filters keys by text.
+- **Only missing** shows incomplete keys only.
+- **Next missing** jumps to next incomplete key in current filter result.
 
 ---
 
-## 9) Refresh behavior with unsaved changes
-If there are unsaved edits and you click **Refresh**, the app asks for confirmation before discarding changes.
+## 9) Refresh Behavior
+If unsaved changes exist and you click **Refresh**, app asks for confirmation before discarding changes.
 
 ---
 
-## 10) Create a new language
-Click **Create language**.
+## 10) Create New Language
+Use **Create language**.
 
-Dialog fields:
-- **New language (folder name)**: e.g. `it-IT`
-- **Fallback language (optional)**
+Fields:
+- New language folder (e.g. `it-IT`)
+- Optional fallback language
 
 Behavior:
-- Creates the language folder.
-- Creates all existing `.lang` files for the new language.
-- If fallback is selected: values are copied from fallback files.
-- If no fallback: keys are created with empty values.
+- Creates language folder
+- Creates all existing `.lang` files
+- With fallback: copy fallback values
+- Without fallback: create keys with empty values
 
 ---
 
-## 11) JSON export/import
+## 11) JSON Import / Export
+### Export
+- Exports current loaded file scope across all languages.
 
-## Export JSON
-- Click **Export JSON**.
-- Exports current `.lang` scope across all languages.
-
-## Import JSON
-- Click **Import JSON**.
+### Import
 - Choose mode:
-  - **Merge**: keep existing data and add/update incoming entries.
-  - **Replace**: replace current in-memory set with import content.
+  - **Merge**
+  - **Replace**
 
-Expected JSON shape:
-
+Expected format:
 ```json
 {
   "fileName": "Items.lang",
@@ -180,69 +170,54 @@ Expected JSON shape:
 
 ---
 
-## 12) Auto-translation
-Click **Auto-translation** on a selected key.
-
-Behavior:
-- Uses the first non-empty language value as source.
-- Fills missing target language fields only.
-- Tries configured/default LibreTranslate endpoints.
+## 12) Auto-Translation
+- Uses first non-empty language value as source.
+- Fills missing target fields only.
+- Tries configured LibreTranslate endpoint + fallback endpoints.
 - Falls back to MyMemory if needed.
 
-### Configure endpoint
-Use **Translation URL** to set a custom LibreTranslate URL.
-
-Tip: self-hosted endpoint is recommended for privacy/control.
+Configure endpoint via **Translation URL**.
 
 ---
 
-## 13) Persistence and config
-The app stores state in:
+## 13) Config and Persistence
+State file is stored next to executable context:
+- `config/lfe.config`
 
-- `config/lfe.config` (next to EXE)
-
-Stored values include:
-- last root folder
-- selected `.lang` filename
+Stored:
+- last root path
+- selected `.lang` file
 - UI language
 - translation endpoint URL
 
 ---
 
-## 14) Exit behavior
-If unsaved changes exist and you close the app, a confirmation dialog appears:
-- Cancel close, or
-- Exit without saving.
+## 14) Exit Behavior
+If there are unsaved changes, closing the app prompts confirmation before exit.
 
 ---
 
 ## 15) Troubleshooting
+### App won’t find `.lang` files
+- Check folder structure and selected root.
 
-## “No .lang file found”
-- Ensure selected root folder contains language subfolders with `.lang` files.
+### Auto-translation fails
+- Check internet access and endpoint URL.
+- Public endpoints can be rate-limited.
 
-## Auto-translation fails
-- Check internet connection.
-- Check endpoint URL in **Translation URL**.
-- Some public endpoints can be rate-limited/unavailable.
+### Encoding glitches
+- Ensure UTF-8 files.
+- Restart app after updates.
 
-## Encoding/strange characters
-- Ensure files are UTF-8.
-- If issues appear after edits, rebuild/restart app.
-
-## App not closing correctly
-- Update to latest build; close handling is managed by main process now.
-
----
-
-## 16) Recommended release process
-1. `npm install`
-2. `npm run dist`
-3. Test setup from `mod/dist/`
-4. Publish installer + optional SHA256 hash
-5. Mention known false-positive possibility for unsigned executables
+### Push/build issues with large files
+- Do not commit `mod/dist` and `mod/node_modules` to Git.
+- Prefer GitHub Releases for installer uploads.
 
 ---
 
-## 17) License / usage scope
-This project is intended for private, non-commercial usage (as defined in repository license files).
+## 16) Release Recommendation
+For end users, prefer distributing:
+- installer EXE from `mod/dist/`
+- or zipped portable folder `win-unpacked/Hytale Languagefile Editor`
+
+Include checksum (SHA256) and a short AV false-positive note for unsigned builds.
